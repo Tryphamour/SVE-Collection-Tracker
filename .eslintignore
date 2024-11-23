@@ -1,0 +1,4 @@
+node_modules
+dist
+commitlint.config.ts
+apps/server/migrations
