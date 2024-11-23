@@ -24,9 +24,12 @@ services:
     env_file:
       - ./.env
     restart: unless-stopped
+    networks:
+      - web
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy:/data/caddy
+
   client:
     build:
       context: .
