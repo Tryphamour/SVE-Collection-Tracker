@@ -1,0 +1,49 @@
+name: SVE-Tracker
+
+networks:
+  web:
+    driver: bridge
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: SVE-caddy
+    command:
+      [
+        'caddy',
+        'run',
+        '--watch',
+        '--config',
+        '/etc/caddy/Caddyfile',
+        '--adapter',
+        'caddyfile',
+      ]
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - ./.env
+    restart: unless-stopped
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy:/data/caddy
+  client:
+    build:
+      context: .
+      args:
+        - APP=apps/client
+      dockerfile: Dockerfile
+    container_name: SVE-client
+    # depends_on:
+      # server:
+      #   condition: service_healthy
+    networks:
+      - web
+    ports:
+      - ${CLIENT_PORT_SOURCE}:${CLIENT_PORT_TARGET}
+    restart: always
+    volumes:
+      - ./apps/client:/SVE/apps/client
+
+volumes:
+  caddy:
