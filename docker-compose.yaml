@@ -48,6 +48,31 @@ services:
     volumes:
       - ./apps/client:/SVE/apps/client
 
+  server:
+    build:
+      context: .
+      args:
+        - APP=apps/server
+      dockerfile: Dockerfile
+    container_name: SVE-server
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # redis:
+      #   condition: service_healthy
+    healthcheck:
+      interval: 250ms
+      retries: 10
+      test: ['CMD', 'pnpm', 'healthcheck']
+      timeout: 1s
+    networks:
+      - web
+    ports:
+      - ${SERVER_PORT_SOURCE}:${SERVER_PORT_TARGET}
+    restart: always
+    volumes:
+      - ./apps/server:/SVE/apps/server
+
   postgres:
     container_name: SVE-postgres
     env_file:
