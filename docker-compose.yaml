@@ -37,9 +37,8 @@ services:
         - APP=apps/client
       dockerfile: Dockerfile
     container_name: SVE-client
-    # depends_on:
-      # server:
-      #   condition: service_healthy
+    depends_on:
+      - server
     networks:
       - web
     ports:
@@ -60,6 +59,7 @@ services:
         condition: service_healthy
       # redis:
       #   condition: service_healthy
+    env_file: ./apps/server/.env
     healthcheck:
       interval: 250ms
       retries: 10
