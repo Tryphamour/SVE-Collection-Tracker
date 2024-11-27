@@ -37,9 +37,8 @@ services:
         - APP=apps/client
       dockerfile: Dockerfile
     container_name: SVE-client
-    # depends_on:
-      # server:
-      #   condition: service_healthy
+    depends_on:
+      - server
     networks:
       - web
     ports:
@@ -48,5 +47,50 @@ services:
     volumes:
       - ./apps/client:/SVE/apps/client
 
+  server:
+    build:
+      context: .
+      args:
+        - APP=apps/server
+      dockerfile: Dockerfile
+    container_name: SVE-server
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # redis:
+      #   condition: service_healthy
+    env_file: ./apps/server/.env
+    healthcheck:
+      interval: 250ms
+      retries: 10
+      test: ['CMD', 'pnpm', 'healthcheck']
+      timeout: 1s
+    networks:
+      - web
+    ports:
+      - ${SERVER_PORT_SOURCE}:${SERVER_PORT_TARGET}
+    restart: always
+    volumes:
+      - ./apps/server:/SVE/apps/server
+
+  postgres:
+    container_name: SVE-postgres
+    env_file:
+      - ./apps/server/.env
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U dev -d svect']
+      interval: 250ms
+      timeout: 250ms
+      retries: 10
+    image: postgres:16.2
+    networks:
+      - web
+    ports:
+      - ${DATABASE_PORT_SOURCE}:${DATABASE_PORT_TARGET}
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
 volumes:
   caddy:
+  postgres:
