@@ -48,5 +48,24 @@ services:
     volumes:
       - ./apps/client:/SVE/apps/client
 
+  postgres:
+    container_name: SVE-postgres
+    env_file:
+      - ./apps/server/.env
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U dev -d svect']
+      interval: 250ms
+      timeout: 250ms
+      retries: 10
+    image: postgres:16.2
+    networks:
+      - web
+    ports:
+      - ${DATABASE_PORT_SOURCE}:${DATABASE_PORT_TARGET}
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
 volumes:
   caddy:
+  postgres:
