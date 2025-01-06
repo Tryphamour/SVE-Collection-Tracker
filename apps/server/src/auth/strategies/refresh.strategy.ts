@@ -11,7 +11,6 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh-jwt') {
     @Inject(refreshJwtConfig.KEY)
     private refreshJwtConfiguration: ConfigType<typeof refreshJwtConfig>,
   ) {
-    console.log(refreshJwtConfig);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: refreshJwtConfiguration.secret,
