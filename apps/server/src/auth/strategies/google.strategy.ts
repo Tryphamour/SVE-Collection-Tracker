@@ -3,12 +3,14 @@ import { ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import googleOauthConfig from '../config/google-oauth.config';
+import { AuthService } from '../types/auth.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject(googleOauthConfig.KEY)
     private googleConfig: ConfigType<typeof googleOauthConfig>,
+    private authService: AuthService,
   ) {
     super({
       clientID: googleConfig.clientId,
@@ -24,6 +26,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     profile: any,
     done: VerifyCallback,
   ) {
-    console.log({ profile });
+    const user = await this.authService.validateGoogleUser({
+      email: profile.emails[0].value,
+      username: profile.displayName,
+      avatarUrl: profile.photos[0].value,
+
+      // TODO: once we have a local strategy, we need to check if password is not empty before validate
+      password: '',
+    });
+
+    done(null, user);
   }
 }
