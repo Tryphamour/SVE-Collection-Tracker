@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 // import { PostPublicLoginResponseBody } from '@packages/shared';
 import { useState } from 'react';
+import { Google } from 'react-bootstrap-icons';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
@@ -14,6 +15,8 @@ import {
   FormMessage,
 } from './ui/form';
 import { Input } from './ui/input';
+
+const baseUrl = import.meta.env.VITE_BASE_APP_URL;
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -51,6 +54,12 @@ export default function LoginForm({
     //   window.location.href = '/';
     // }
     setIsLoading(false);
+  };
+
+  const onGoogleLogin = async () => {
+    const url = `${baseUrl}/api/auth/google/login`;
+
+    window.open(url, 'google-login', 'width=500,height=600');
   };
 
   return (
@@ -104,9 +113,9 @@ export default function LoginForm({
               </Button>
             </form>
           </Form>
-          {/* <Button variant="outline" className="w-full">
-            <Google className='mr-2'/> Login with Google
-          </Button> */}
+          <Button variant="outline" className="w-full" onClick={onGoogleLogin}>
+            <Google className="mr-2" /> Login with Google
+          </Button>
         </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{' '}
