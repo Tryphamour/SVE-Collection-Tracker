@@ -46,6 +46,7 @@ services:
     restart: always
     volumes:
       - ./apps/client:/SVE/apps/client
+      - ./shared:/SVE/shared
 
   server:
     build:
@@ -72,6 +73,7 @@ services:
     restart: always
     volumes:
       - ./apps/server:/SVE/apps/server
+      - ./shared:/SVE/shared
 
   postgres:
     container_name: SVE-postgres
