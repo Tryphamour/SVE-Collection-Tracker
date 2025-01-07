@@ -15,8 +15,18 @@ export class AuthController {
   @Get('google/callback')
   async googleCallback(@Req() req, @Res() res) {
     const response = await this.authService.login(req.user.id);
+    res.cookie('refreshToken', response.refreshToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
+    res.cookie('accessToken', response.accessToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
     res.redirect(
-      `${process.env.CLIENT_URL}/auth/callback?token=${response.accessToken}&refreshToken=${response.refreshToken}`,
+      `/loginCallback?token=${response.accessToken}&refreshToken=${response.refreshToken}`,
     );
   }
 
