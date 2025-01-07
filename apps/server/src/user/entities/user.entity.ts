@@ -9,5 +9,11 @@ export class User {
   email: string;
 
   @Column({ nullable: false })
-  name: string;
+  username: string;
+
+  @Column({ nullable: true })
+  avatarUrl: string;
+
+  @Column({ nullable: true })
+  hashedRefreshToken: string;
 }
