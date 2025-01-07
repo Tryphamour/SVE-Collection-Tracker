@@ -2,6 +2,8 @@ import LoginForm from '#src/components/loginForm';
 import RegisterForm from '#src/components/registerForm';
 import { useState } from 'react';
 
+// TODO: prevent user from accessing this page if they are already logged in
+// once logout is implemented
 export default function LoginPage() {
   const [formType, setFormType] = useState<'login' | 'register'>('login');
 
