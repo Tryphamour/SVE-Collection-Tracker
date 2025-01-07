@@ -1,4 +1,5 @@
 import { HttpRequest } from '#shared/classes/httpRequestClass';
+import { HttpHeaders } from '#shared/constants/httpConstants';
 
 const baseUrl = import.meta.env.VITE_BASE_APP_URL;
 
@@ -20,6 +21,12 @@ export const getRequest = <T = Record<string, unknown>>(
     .setBaseUrl(`${baseUrl}/api`)
     .setPayload(payload);
 
+  const accessToken = window.localStorage.getItem('accessToken');
+
+  if (accessToken) {
+    request.setHttpHeader(HttpHeaders.Authorization, `Bearer ${accessToken}`);
+  }
+
   return request.get<T>(endpoint);
 };
 
@@ -34,6 +41,12 @@ export const postRequest = <T = Record<string, unknown>>(
   const request = new HttpRequest()
     .setBaseUrl(`${baseUrl}/api`)
     .setPayload(payload);
+
+  const accessToken = window.localStorage.getItem('accessToken');
+
+  if (accessToken) {
+    request.setHttpHeader(HttpHeaders.Authorization, `Bearer ${accessToken}`);
+  }
 
   return request.post<T>(endpoint);
 };
