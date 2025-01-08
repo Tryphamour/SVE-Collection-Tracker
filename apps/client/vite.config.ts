@@ -20,6 +20,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '#src': path.resolve(fileURLToPath(new URL('src/', import.meta.url))),
+      '#shared': path.resolve(__dirname, '../../shared'),
     },
   },
 });

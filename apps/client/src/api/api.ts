@@ -1,10 +1,32 @@
-import { HttpRequest } from '#shared/classes/httpRequestClass';
+import { HttpRequest, HttpResponse } from '#shared/classes/httpRequestClass';
+import { HttpHeaders, HttpStatusCodes } from '#shared/constants/httpConstants';
 
 const baseUrl = import.meta.env.VITE_BASE_APP_URL;
 
 export interface RequestConfiguration {
   endpoint: string;
   payload?: Record<string, unknown>;
+}
+
+const handleResponse = async <T>(responsePromise: Promise<HttpResponse<T>>) => {
+  const response = await responsePromise;
+
+  if (response.status === HttpStatusCodes.Unauthorized) {
+    // Clear storage and redirect to login
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('refreshToken');
+    window.location.href = '/login';
+  }
+
+  return response;
+};
+
+const setHeaders = (request: HttpRequest) => {
+  const accessToken = window.localStorage.getItem('accessToken');
+
+  if (accessToken) {
+    request.setHttpHeader(HttpHeaders.Authorization, `Bearer ${accessToken}`);
+  }
 }
 
 /**
@@ -20,7 +42,9 @@ export const getRequest = <T = Record<string, unknown>>(
     .setBaseUrl(`${baseUrl}/api`)
     .setPayload(payload);
 
-  return request.get<T>(endpoint);
+  setHeaders(request);
+
+  return handleResponse(request.get<T>(endpoint));
 };
 
 /**
@@ -35,5 +59,7 @@ export const postRequest = <T = Record<string, unknown>>(
     .setBaseUrl(`${baseUrl}/api`)
     .setPayload(payload);
 
-  return request.post<T>(endpoint);
+  setHeaders(request);
+
+  return handleResponse(request.post<T>(endpoint));
 };
