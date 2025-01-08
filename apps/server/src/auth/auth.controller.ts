@@ -33,6 +33,13 @@ export class AuthController {
     );
   }
 
+  @Get('logout')
+  logout(@Res() res) {
+    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken');
+    res.redirect('/login');
+  }
+
   @Post('login')
   async login(@Req() req) {
     const token = await this.authService.login(req.user.id);
