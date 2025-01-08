@@ -123,7 +123,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <AppNavbar />
-      {children}
+      <div className="p-4">{children}</div>
     </>
   );
 }
