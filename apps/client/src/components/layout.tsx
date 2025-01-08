@@ -17,7 +17,7 @@ const items = [
   {
     title: 'Card list',
     icon: PersonBadge, // TODO: find a better icon
-    url: '/cards',
+    url: '/',
   },
   {
     title: 'My collection',
@@ -87,7 +87,9 @@ function AppNavbar() {
     <nav className="bg-gray-800" aria-label="Global">
       <div className="flex items-center justify-between h-16">
         <div className="flex-shrink-0 flex items-center ml-8">
-          <img className="block h-8 w-auto" src="SVECT.png" alt="SVECT" />
+          <Link to="/">
+            <img className="block h-8 w-auto" src="SVECT.png" alt="SVECT" />
+          </Link>
         </div>
         <div>
           <Input
