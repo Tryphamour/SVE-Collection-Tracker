@@ -120,7 +120,7 @@ function CardMenu() {
 function CardList({ layoutMode }: { layoutMode: 'gridSM' | 'gridLG' }) {
   return (
     <div
-      className={`bg-white dark:bg-gray-800 p-4 ${layoutMode === 'gridSM' ? 'grid grid-cols-2' : 'grid grid-cols-3'}`}
+      className={`p-4 ${layoutMode === 'gridSM' ? 'grid grid-cols-2' : 'grid grid-cols-3'}`}
     >
       No Cards
     </div>
@@ -131,7 +131,7 @@ export default function HomePage() {
   const [layoutMode, setLayoutMode] = useState<'gridSM' | 'gridLG'>('gridSM');
   return (
     <Layout>
-      <div className="flex items-end justify-end h-full w-full space-x-2">
+      <div className="flex items-end justify-end h-full w-full space-x-2 mb-2">
         <FilterDropdown />
         <SortSelect />
         <LayoutToggle layoutMode={layoutMode} setLayoutMode={setLayoutMode} />
