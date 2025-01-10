@@ -83,7 +83,7 @@ export default function RegisterForm({
         <div className="grid gap-2 text-center">
           <h1 className="text-3xl font-bold">Register</h1>
           <p className="text-balance text-muted-foreground">
-            Create a <span className="text-accent-foreground">Matcha</span>{' '}
+            Create a <span className="text-accent-foreground">SVECT</span>{' '}
             account in a few seconds
           </p>
           <Form {...form}>
