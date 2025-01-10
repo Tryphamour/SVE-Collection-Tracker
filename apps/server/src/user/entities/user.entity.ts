@@ -6,5 +6,14 @@ export class User {
   id: number;
 
   @Column({ nullable: false })
-  name: string;
+  email: string;
+
+  @Column({ nullable: false })
+  username: string;
+
+  @Column({ nullable: true })
+  avatarUrl: string;
+
+  @Column({ nullable: true })
+  hashedRefreshToken: string;
 }

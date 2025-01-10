@@ -55,3 +55,6 @@
 .env
 node_modules/*
 apps/*/node_modules
+
+# vscode
+.vscode
