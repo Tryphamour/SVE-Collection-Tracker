@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer');
-const fs = require('fs');
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
@@ -11,7 +10,6 @@ const fs = require('fs');
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   const scrollToBottom = async () => {
-    let lastScrollTop = 0;
     let currentScrollTop = 0;
 
     while (true) {
@@ -28,8 +26,6 @@ const fs = require('fs');
 
       // Delay between each small scroll step
       await delay(150); // ms between steps (adjust for slower/faster scrolling)
-
-      lastScrollTop = currentScrollTop;
     }
     await delay(2000); // Additional delay to let cards load after reaching the bottom
   };
@@ -40,11 +36,6 @@ const fs = require('fs');
 
     while (true) {
       const newCards = await page.evaluate(() => {
-        const getText = (selector, parent) => {
-          const element = parent.querySelector(selector);
-          return element ? element.innerText.trim() : null;
-        };
-
         const getHref = (selector, parent) => {
           const link = parent.querySelector(selector);
           return link ? link.href : null;
@@ -106,7 +97,6 @@ const fs = require('fs');
     return cards;
   };
 
-  const allCards = await getAllCards();
   // TODO: Save to a file or database
 
   await browser.close();
