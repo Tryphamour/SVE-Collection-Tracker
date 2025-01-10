@@ -2,10 +2,6 @@ import { useEffect, useState } from 'react';
 import { ThemeProviderContext } from './themeProviderContext';
 import { Theme, ThemeProviderProps } from './types';
 
-
-
-
-
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
