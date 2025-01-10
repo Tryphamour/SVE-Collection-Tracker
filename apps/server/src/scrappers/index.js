@@ -1,15 +1,21 @@
 const puppeteer = require('puppeteer');
 
+const getHref = (selector, parent) => {
+  const link = parent.querySelector(selector);
+  return link ? link.href : null;
+};
+
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto('https://en.shadowverse-evolve.com/cards/searchresults/?expansion_name=BP01&view=text&sort=new', {
-    waitUntil: 'networkidle0'
+  await page.goto('https://en.shadowverse-evolve.com/cards/searchresults/?expansion_name=BP01&view=text&sort=new', { // Change URL to the desired page
+    waitUntil: 'networkidle0' // Wait until the page is fully loaded
   });
 
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   const scrollToBottom = async () => {
+    let lastScrollTop = 0;
     let currentScrollTop = 0;
 
     while (true) {
@@ -26,6 +32,8 @@ const puppeteer = require('puppeteer');
 
       // Delay between each small scroll step
       await delay(150); // ms between steps (adjust for slower/faster scrolling)
+
+      lastScrollTop = currentScrollTop;
     }
     await delay(2000); // Additional delay to let cards load after reaching the bottom
   };
@@ -36,11 +44,6 @@ const puppeteer = require('puppeteer');
 
     while (true) {
       const newCards = await page.evaluate(() => {
-        const getHref = (selector, parent) => {
-          const link = parent.querySelector(selector);
-          return link ? link.href : null;
-        };
-
         const cardElements = document.querySelectorAll('.cardlist-Result_List.cardlist-Result_List_Txt li');
 
         return Array.from(cardElements).map(card => {
@@ -97,6 +100,7 @@ const puppeteer = require('puppeteer');
     return cards;
   };
 
+  const allCards = await getAllCards();
   // TODO: Save to a file or database
 
   await browser.close();
