@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth/jwt-auth.guard';
 import { UserModule } from './user/user.module';
+import { CardModule } from './card/card.module';
+import { SetModule } from './set/set.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { UserModule } from './user/user.module';
     }),
     UserModule,
     AuthModule,
+    CardModule,
+    SetModule,
   ],
   controllers: [AppController],
   providers: [
