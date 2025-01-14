@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Card } from '../../card/entities/card.entity';
+import { Game } from '../../game/entities/game.entity';
 
 @Entity()
 export class Set {
@@ -11,4 +12,7 @@ export class Set {
 
   @OneToMany(() => Card, (card) => card.set)
   cards: Card[];
+
+  @ManyToOne(() => Game, (game) => game.sets, { nullable: false })
+  game: Game;
 }

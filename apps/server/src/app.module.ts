@@ -8,6 +8,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth/jwt-auth.guard';
 import { UserModule } from './user/user.module';
 import { CardModule } from './card/card.module';
 import { SetModule } from './set/set.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SetModule } from './set/set.module';
     AuthModule,
     CardModule,
     SetModule,
+    GameModule,
   ],
   controllers: [AppController],
   providers: [
