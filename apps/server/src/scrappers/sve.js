@@ -1,14 +1,12 @@
-const puppeteer = require('puppeteer');
-
-const getHref = (selector, parent) => {
-  const link = parent.querySelector(selector);
-  return link ? link.href : null;
-};
+import puppeteer from 'puppeteer';
+import fs from 'fs';
+// import { CardService } from '../card/card.service';
+// import { CreateCardDto } from '../card/dto/create-card.dto';
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto('https://en.shadowverse-evolve.com/cards/searchresults/?expansion_name=BP01&view=text&sort=new', { // Change URL to the desired page
+  await page.goto('https://en.shadowverse-evolve.com/cards/searchresults/?view=text&sort=new', { // Change URL to the desired page
     waitUntil: 'networkidle0' // Wait until the page is fully loaded
   });
 
@@ -44,6 +42,11 @@ const getHref = (selector, parent) => {
 
     while (true) {
       const newCards = await page.evaluate(() => {
+        const getHref = (selector, parent) => {
+          const link = parent.querySelector(selector);
+          return link ? link.href : null;
+        };
+
         const cardElements = document.querySelectorAll('.cardlist-Result_List.cardlist-Result_List_Txt li');
 
         return Array.from(cardElements).map(card => {
@@ -102,6 +105,12 @@ const getHref = (selector, parent) => {
 
   const allCards = await getAllCards();
   // TODO: Save to a file or database
+
+  // Save to cards.json file
+  fs.writeFileSync('cards.json', JSON.stringify(allCards, null, 2), 'utf-8');
+  console.log('Cards saved to cards.json');
+
+  // Save to database
 
   await browser.close();
 })();
