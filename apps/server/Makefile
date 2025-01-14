@@ -1,2 +1,2 @@
-scrape:
-	node src/scrappers/index.js
+scrape-sve:
+	node src/scrappers/sve.js
